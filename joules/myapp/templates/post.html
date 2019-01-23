@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block post %}
+    <div id="post">
+        <div class="col-sm-5">
+            <div class="input">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="text-center">
+                <h3>{{ product.product_id }}</h3>
+                <a href="{{ product.product_href }}"><img src="{{ product.product_image }}" style="width:300px;" alt=""></a>
+                <p>{{ product.product_name }}</p>
+                <p>{{ product.product_price }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
