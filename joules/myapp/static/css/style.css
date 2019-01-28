@@ -6,3 +6,6 @@
 #post .input {
 	margin-top: 20px;
 }
+
+
+.prod-cont .size {display: inline-block;font-size: 20px;padding: 10px;}

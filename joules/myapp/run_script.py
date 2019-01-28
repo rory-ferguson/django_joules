@@ -12,11 +12,12 @@ class NewIn(object):
         self.url = None
         self.sku = None
         self.response_object = None
-        self.product_id = None
-        self.product_href = None
-        self.product_name = None
-        self.product_price = None
-        self.product_image = None
+        self.stock = None
+        self.id = None
+        self.href = None
+        self.name = None
+        self.price = None
+        self.image = None
         self.returned_url = None
         self.product_dict = dict()
 
@@ -34,24 +35,31 @@ class NewIn(object):
             self.response_object = bs4.BeautifulSoup(response.text, "html.parser")
 
     def scrape(self):
+        """ Product SKU """
+        self.product_dict['id'] = self.sku
+
+        """ Product URL """
+        self.product_dict['href'] = self.returned_url
+
         """ Product Image URL """
         r = self.response_object.find('img', {'class': 'product-image'})
         product_image = json.loads(r['data-media'])
-        self.product_image = 'https:{}'.format(product_image['565'])
+        self.product_dict['image'] = 'https:{}'.format(product_image['565'])
 
-        """ New Price """
-        price_object = self.response_object.find('div', {'class': 'product-price'})
-        self.product_price = price_object.find('span', class_='new-price').text
+        """ Product New Price """
+        r = self.response_object.find('div', {'class': 'product-price'})
+        self.product_dict['price'] = r.find('span', class_='new-price').text
 
         """ Product Name """
         r = self.response_object.find('h1', {'class': 'item-name'})
-        self.product_name = r.text
+        self.product_dict['name'] = r.text
 
-        self.product_dict['id'] = self.sku
-        self.product_dict['name'] = self.product_name
-        self.product_dict['href'] = self.returned_url
-        self.product_dict['image'] = self.product_image
-        self.product_dict['price'] = self.product_price
+        r = self.response_object.find_all('span', {'id': 'product-size-select-productDetailPage'})
+        self.product_dict['stock'] = {}
+        for r in self.response_object.find_all('span', {'id': 'product-size-select-productDetailPage'}):
+            size = r.find('input').attrs['data-size']
+            stock = r.find('input').attrs['data-stock-level']
+            self.product_dict['stock'].setdefault(size, stock)
 
         return self.product_dict
 
@@ -63,5 +71,5 @@ def run_script(sku):
     mainworker.scrape()
 
 
-sku = '205097|NAVYHEART'
+sku = '203531|WHITE'
 run_script(sku)
