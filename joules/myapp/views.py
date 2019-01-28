@@ -1,25 +1,25 @@
-from django.http import HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
-from .run_script import NewIn
+import requests
+import bs4
+import logging
+import json
 
-from .forms import SkuOne
+from .run_script import NewIn
+from .forms import NameForm
 
 
 def get_name(request):
     if request.method == 'POST':
-        if 'Product_01' in request.POST:
-            form = SkuOne(request.POST or None)
-            if form.is_valid():
-                sku = form.cleaned_data['sku']  # 203531|WHITE
-                run = NewIn()
-                run.dict(product='Product_01')
-                run.build_url(sku)
-                run.get_request()
-                product = run.scrape()
-                print(product)
+        sku = request.POST.get('sku')
+        run_script = NewIn()
+        run_script.build_url(sku)
+        run_script.get_request()
+        product = run_script.scrape()
 
-                return render(request, 'post.html', {'form': form, 'product': product})
+        return JsonResponse(product)
+
     else:
-        form = SkuOne()
+        form = NameForm()
 
     return render(request, 'post.html', {'form': form})

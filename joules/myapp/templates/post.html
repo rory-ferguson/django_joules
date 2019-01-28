@@ -1,32 +1,22 @@
 {% extends 'base.html' %}
 
 {% block post %}
-
     <div id="post">
-        <div class="col-sm-12">
+        <div class="col-sm-5">
             <div class="input">
-                <form action="" method="post">
+                <form action="" method="post" id="post-form">
                     {% csrf_token %}
-                    {{ form }}
-                    <input type="submit" name="Product_01" value="Submit">
+                    <div class="fieldWrapper" id="the_post">
+                        {{ form }}
+                    </div>
+                    <input type="submit" value="Post" class="tiny button">
+                    <div id="results"></div>
                 </form>
             </div>
         </div>
-        {% for key, value in product.items %}
-            {% if key == 'Product_01' %}
-                {% for k, v in value.items %}
-                        <div class="text-center">
-                            <h3>{{ value.product_id }}</h3>
-                            <a href="{{ value.product_href }}"><img src="{{ value.product_image }}" style="width:300px;" alt=""></a>
-                            <p>{{ value.product_name }}</p>
-                            <span><s>{{ value.product_waswasprice }}</s><span>
-                            <span><s>{{ value.product_wasprice }}</s><span>
-                            <span>{{ value.product_price }}<span>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-
+        <div class="col-sm-6">
+            <div class="text-center" id="product">
+            </div>
+        </div>
     </div>
 {% endblock %}
