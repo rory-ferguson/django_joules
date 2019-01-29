@@ -1,6 +1,6 @@
 
 // Submit post on submit
-$('#post .col-sm-6 form').on('submit', function(event){
+$('#post form').on('submit', function(event){
     event.preventDefault();
     name = this.className
     sku = $('.' + name + ' div input').val()
