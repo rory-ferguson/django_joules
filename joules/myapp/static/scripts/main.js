@@ -1,6 +1,6 @@
 
 // Submit post on submit
-$('#post .col-sm-5 form').on('submit', function(event){
+$('#post .col-sm-6 form').on('submit', function(event){
     event.preventDefault();
     name = this.className
     sku = $('.' + name + ' div input').val()
@@ -33,14 +33,21 @@ function create_post(sku, name) {
             var htm = []
             htm +='<h4>Sizes:</h4>'
             for (const [key, value] of Object.entries(json.stock)) {
-                htm +='<div class="size"><span>' + 
-                key + ': </span><span class="stock-value">' + 
-                value + ' </span></div>'
+                htm +='<div class="size"><span>' + key + ': </span><span class="stock-value">' + value + ' </span></div>'
             }
+
+            prod_list = '<tr><td align="center">' + json.id + '</td>'
+            for (const [key, value] of Object.entries(json.stock)) {
+                prod_list +='<td>' + key + ': ' + value + '</td>'
+            }
+            prod_list += '</tr>'
+            console.log(prod_list)
+
+            $('.prod-list table').prepend(prod_list)
             $('.prod-cont div.' + name + '-stock').html(htm)
             $('.prod-cont div.' + name).html('<h3>' + json.id + '</h3><a target="_blank" href="' + json.href + '"><img src="' + json.image + '" style="width:300px;" alt=""></a><p>' + json.name + '</p><p>' + json.price + '</p>');
             console.log("success");
-            // Highlight stock value below 5
+
             highlight_low_stock(name);
         },
 
@@ -55,7 +62,6 @@ function create_post(sku, name) {
 
 function highlight_low_stock(name) {
     console.log('.' + name + '-stock span.stock-value')
-    // $('.stock-value').each(function() {
     $('.' + name + '-stock span.stock-value').each(function() {
         if ($(this).text() <= 20) {
             console.log(this)

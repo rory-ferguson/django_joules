@@ -3,7 +3,7 @@
 {% block post %}
     <div id="post">
         <div class="col-sm-12">
-            <div class="col-sm-5">
+            <div class="col-sm-6 tac">
                 <form action="" method="post" class="prod-1">
                     {% csrf_token %}
                     <div>
@@ -12,7 +12,7 @@
                     </div>
                 </form>
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-6 tac">
                 <form action="" method="post" class="prod-2">
                     {% csrf_token %}
                     <div>
@@ -24,14 +24,19 @@
         </div>
         <div class="col-sm-12 prod-cont">
             <div class="col-sm-6">
-                <div class="text-center prod-1-stock"></div>
-                <div class="text-center prod-1"></div>
+                <div class="tac prod-1-stock"></div>
+                <div class="tac prod-1"></div>
             </div>
 
             <div class="col-sm-6">
-                <div class="text-center prod-2-stock"></div>
-                <div class="text-center prod-2"></div>
+                <div class="tac prod-2-stock"></div>
+                <div class="tac prod-2"></div>
             </div>
+        </div>
+        <div class="col-sm-12 prod-list">
+            <p class="tac">History</p>
+            <table cellpadding="0" cellspacing="0" border="0">
+            </table>
         </div>
     </div>
 {% endblock %}

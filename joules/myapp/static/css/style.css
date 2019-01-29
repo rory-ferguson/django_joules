@@ -1,4 +1,13 @@
-
+body {
+	margin: 0;
+	padding: 0;
+}
+.tac {
+	text-align: center;
+}
+.content {
+	position: relative;
+}
 #post {
 
 }
@@ -9,3 +18,11 @@
 
 
 .prod-cont .size {display: inline-block;font-size: 20px;padding: 10px;}
+
+li {
+	list-style: none;
+}
+.prod-list table tr td {
+	padding:0 20px;
+	border: 1px solid black;
+}
