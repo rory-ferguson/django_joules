@@ -38,9 +38,10 @@ function create_post(sku, name) {
                 value + ' </span></div>'
             }
             $('.prod-cont div.' + name + '-stock').html(htm)
-            $('.prod-cont div.' + name).html('<h3>SKU: ' + json.id + '</h3><a href="' + json.href + '"><img src="' + json.image + '" style="width:300px;" alt=""></a><p>' + json.name + '</p><p>' + json.price + '</p>');
+            $('.prod-cont div.' + name).html('<h3>' + json.id + '</h3><a target="_blank" href="' + json.href + '"><img src="' + json.image + '" style="width:300px;" alt=""></a><p>' + json.name + '</p><p>' + json.price + '</p>');
             console.log("success");
-            highlight_low_stock();
+            // Highlight stock value below 5
+            highlight_low_stock(name);
         },
 
         error : function(xhr,errmsg,err) {
@@ -52,10 +53,14 @@ function create_post(sku, name) {
 };
 
 
-function highlight_low_stock() {
-    $('.stock-value').each(function() {
-        if ($(this).text() < 2) {
+function highlight_low_stock(name) {
+    console.log('.' + name + '-stock span.stock-value')
+    // $('.stock-value').each(function() {
+    $('.' + name + '-stock span.stock-value').each(function() {
+        if ($(this).text() <= 20) {
+            console.log(this)
             $(this).css("color", "red");
+            $('.prod-cont div.' + name + ' img').css("filter", "grayscale(100%)");
         }
     });
 }
