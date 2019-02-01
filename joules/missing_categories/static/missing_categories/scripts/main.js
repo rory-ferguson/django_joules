@@ -2,7 +2,7 @@
 // Submit post on submit
 $('#content form').on('submit', function(event){
     event.preventDefault();
-    $('#content div.uk span').removeClass('hidden')
+    $('#content div.uk i').removeClass('hidden')
 });
 
 function validateFunc() {
@@ -50,7 +50,7 @@ function create_post(env) {
             }
             $('#content div.de').append(prod_list)
 
-            $('#content div.uk span').addClass('hidden')
+            $('#content div.uk i').addClass('hidden')
         },
 
         error : function(xhr,errmsg,err) {
