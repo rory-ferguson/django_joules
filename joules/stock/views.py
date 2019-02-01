@@ -22,4 +22,4 @@ def get_name(request):
     else:
         form = NameForm()
 
-    return render(request, 'post.html', {'form': form})
+    return render(request, 'stock/post.html', {'form': form})
