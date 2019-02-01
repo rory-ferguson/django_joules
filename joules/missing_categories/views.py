@@ -13,31 +13,17 @@ def sresponse(request):
     if request.method == 'POST':
         if 'live' in request.POST.get('env'):
             env = request.POST.get('env')
+
             with Pool(processes=3) as pool:
-                r1 = pool.apply_async(run_script, (live[0], ))
-                r2 = pool.apply_async(run_script, (live[1], ))
-                r3 = pool.apply_async(run_script, (live[2], ))
+                p1 = pool.apply_async(run_script, (live[0], ))
+                p2 = pool.apply_async(run_script, (live[1], ))
+                p3 = pool.apply_async(run_script, (live[2], ))
 
-                lst['uk'] = r1.get()
-                lst['us'] = r2.get()
-                lst['de'] = r3.get()
-            # uk = Process(target=run_script, args=(live[0],))
-            # us = Process(target=run_script, args=(live[1],))
-            # de = Process(target=run_script, args=(live[2],))
-            # uk.start()
-            # us.start()
-            # de.start()
-            # uk.join()
-            # us.join()
-            # de.join()
+                lst['uk'] = p1.get()
+                lst['us'] = p2.get()
+                lst['de'] = p3.get()
 
-            # lst['uk'] = uk
-            # lst['us'] = us
-            # lst['de'] = de
-
-                print(lst)
                 return JsonResponse(lst)
-            
 
     else:
         form = SubmitButtonWidget()
