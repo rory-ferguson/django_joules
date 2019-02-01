@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 # python 3.x
 
+import time
 import requests
 import bs4
 import logging
-
+from multiprocessing.dummy import Pool as ThreadPool
 """
     Captures the InsecureRequestWarning (HTTPS SSL Verification Error)
 """
@@ -37,22 +38,24 @@ class Main(object):
 
             if res.status_code == 200:
                 self.parse_soup = bs4.BeautifulSoup(res.text, "html.parser")
-                # print("The Status Code returned is", res.status_code, url[i])
+                print("The Status Code returned is", res.status_code, url[i])
 
-                if len(url) > 1:
-                    """
-                        Searches for product pages with 0 products and appends to a list object
-                    """
-                    for product in self.parse_soup.find_all('div', {"class": "totalResults"}):
-                        self.missing_product.append(url[i])
+    def html_object_soup2(self, url):
+        """
+        HTTP request to store html as an object
+        """
+        res = requests.get(url, verify=False)
 
-            elif res.status_code == 404:
-                # print("The Status Code returned is", res.status_code, url[i])
-                self.mega_menu_404.append(url[i])
+        if res.status_code == 200:
+            self.parse_soup = bs4.BeautifulSoup(res.text, "html.parser")
+            print("The Status Code returned is", res.status_code, url)
 
-            else:
-                # print("The Status Code returned is", res.status_code, url[i])
-                pass
+            """
+                Searches for product pages with 0 products and appends to a list object
+            """
+            if self.parse_soup.find_all('div', {"class": "totalResults"}):
+                self.missing_product.append(url)
+
 
     def mega_menu_list_unfiltered(self):
         """
@@ -107,18 +110,24 @@ class Main(object):
 
 
 def run_script(env):
+    start_time = time.time()
     worker = Main()
     worker.html_object_soup(url=env)
     worker.mega_menu_list_unfiltered()
     worker.nav_list_duplicates()
     worker.filter_external_urls()
     worker.iterate()
-    print(worker.mega_menu_url_list)
-    worker.html_object_soup(url=worker.mega_menu_url_list)
-    """ for testing only """
-    # worker.html_object_soup(url=['https://www.joules.com/Girls-Clothing/Little-Joule-Characters', 'https://www.joules.com/Girls-Clothing/Slippers', 'https://www.joules.com/Boys-Clothing/Slippers'])
+
+    urls = worker.mega_menu_url_list
+    print(len(urls))
+    # urls = ['https://www.joules.com/Girls-Clothing/Little-Joule-Characters', 'https://www.joules.com/Girls-Clothing/Slippers', 'https://www.joules.com/Boys-Clothing/Slippers']
+    pool = ThreadPool(8)
+    pool.map(worker.html_object_soup2, urls)
+    pool.close()
+    pool.join()
     lst = worker.write_out()
-    print(lst)
+    # print(lst)
+    print("--- %s seconds ---" % (time.time() - start_time))
     return lst
 
 
