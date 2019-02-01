@@ -15,7 +15,6 @@ logging.captureWarnings(True)
 class Main(object):
 
     def __init__(self):
-        self.mega_menu_404 = []
         self.missing_product = []
         self.mm_list_unfiltered = []
         self.list_purge_duplicates = []
@@ -25,39 +24,25 @@ class Main(object):
         self.list_purge_duplicates_one = []
         self.list_purge_duplicates_two = []
         self.parse_soup = None
-        self.product_dict = dict()
         self.domain_url = None
 
-    def html_object_soup(self, url):
-        """
-        HTTP request to store html as an object
-        """
+    def domain(self, url):
         self.domain_url = url
-        for i in range(len(url)):
-            res = requests.get(url[i], verify=False)
+        return self.domain_url
 
-            if res.status_code == 200:
-                self.parse_soup = bs4.BeautifulSoup(res.text, "html.parser")
-                print("The Status Code returned is", res.status_code, url[i])
-
-    def html_object_soup2(self, url):
+    def request(self, url):
         """
         HTTP request to store html as an object
         """
-        res = requests.get(url, verify=False)
+        r = requests.get(url, verify=False)
 
-        if res.status_code == 200:
-            self.parse_soup = bs4.BeautifulSoup(res.text, "html.parser")
-            print("The Status Code returned is", res.status_code, url)
+        if r.status_code == 200:
+            self.parse_soup = bs4.BeautifulSoup(r.text, "html.parser")
 
-            """
-                Searches for product pages with 0 products and appends to a list object
-            """
             if self.parse_soup.find_all('div', {"class": "totalResults"}):
                 self.missing_product.append(url)
 
-
-    def mega_menu_list_unfiltered(self):
+    def nav_list_unfiltered(self):
         """
             Stored list of navigation links from the mega menu // unfiltered
         """
@@ -88,7 +73,7 @@ class Main(object):
 
         return self.list_purge_duplicates
 
-    def filter_external_urls(self):
+    def nav_filter_external(self):
         """
             Filter out external urls such as blog/pinterest
         """
@@ -99,8 +84,7 @@ class Main(object):
 
     def iterate(self):
         for i in list_purge_external_urls:
-            for j in self.domain_url:
-                self.mega_menu_url_list.append(j + i)
+            self.mega_menu_url_list.append(self.domain_url + i)
 
     def write_out(self):
         """
@@ -111,25 +95,22 @@ class Main(object):
 
 def run_script(env):
     start_time = time.time()
+    print(f'Running search on {env[0]}...')
     worker = Main()
-    worker.html_object_soup(url=env)
-    worker.mega_menu_list_unfiltered()
+    worker.request(url=worker.domain(url=env[0]))
+    worker.nav_list_unfiltered()
     worker.nav_list_duplicates()
-    worker.filter_external_urls()
+    worker.nav_filter_external()
     worker.iterate()
-
-    urls = worker.mega_menu_url_list
-    print(len(urls))
-    # urls = ['https://www.joules.com/Girls-Clothing/Little-Joule-Characters', 'https://www.joules.com/Girls-Clothing/Slippers', 'https://www.joules.com/Boys-Clothing/Slippers']
-    pool = ThreadPool(8)
-    pool.map(worker.html_object_soup2, urls)
+    pool = ThreadPool(4)
+    pool.map(worker.request, worker.mega_menu_url_list)
     pool.close()
     pool.join()
     lst = worker.write_out()
-    # print(lst)
     print("--- %s seconds ---" % (time.time() - start_time))
     return lst
 
 
-live = [['https://www.joules.com'], ['https://www.joulesusa.com'], ['https://www.tomjoule.de']]
-run_script(env=live[0])
+if __name__ == '__main__':
+    live = [['https://www.joules.com'], ['https://www.joulesusa.com'], ['https://www.tomjoule.de']]
+    run_script(env=live[0])
