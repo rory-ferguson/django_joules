@@ -9,7 +9,7 @@ staging = [['https://uk-staging.prod.joules.joules-prod01.aws.eclipsegroup.co.uk
 uk, us, de = [], [], []
 lst = {}
 
-def sresponse(request):
+def main(request):
     if request.method == 'POST':
         if 'live' in request.POST.get('env'):
             env = request.POST.get('env')
@@ -41,4 +41,4 @@ def sresponse(request):
     else:
         form = SubmitButtonWidget()
 
-    return render(request, 'missing_categories/post.html', {'form': form})
+    return render(request, 'missing_categories/content.html', {'form': form})
