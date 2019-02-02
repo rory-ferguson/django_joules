@@ -4,5 +4,5 @@ from . import views
 app_name = 'missing_categories'
 
 urlpatterns = [
-    url(r'', views.sresponse, name=app_name),
+    url(r'', views.main, name=app_name),
 ]
