@@ -24,6 +24,19 @@ def sresponse(request):
                 lst['de'] = p3.get()
 
                 return JsonResponse(lst)
+        if 'staging' in request.POST.get('env'):
+            env = request.POST.get('env')
+
+            with Pool(processes=3) as pool:
+                p1 = pool.apply_async(run_script, (staging[0], ))
+                p2 = pool.apply_async(run_script, (staging[1], ))
+                p3 = pool.apply_async(run_script, (staging[2], ))
+
+                lst['uk'] = p1.get()
+                lst['us'] = p2.get()
+                lst['de'] = p3.get()
+
+                return JsonResponse(lst)
 
     else:
         form = SubmitButtonWidget()
