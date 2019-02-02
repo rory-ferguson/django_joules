@@ -6,13 +6,6 @@ body {
 	font-family: 'Roboto', sans-serif;
 }
 
-.header {
-	height: 75px;
-	background-color: #123123;
-}
-.header h1 {
-	color: #fff;
-}
 
 .tac {
 	text-align: center;

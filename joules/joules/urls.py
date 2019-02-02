@@ -20,11 +20,13 @@ from django.conf.urls.static import static
 from django.conf import settings
 from stock import views
 from missing_categories import views
+from home import views as home_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^stock/', include('stock.urls')),
     url(r'^missing/', include('missing_categories.urls')),
+    url(r'^$', home_views.index, name="home")
 ]
 
 urlpatterns += staticfiles_urlpatterns()
