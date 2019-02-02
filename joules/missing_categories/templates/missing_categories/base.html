@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'missing_categories/css/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 </head>
@@ -17,12 +19,12 @@
         <div class="large-container">
             <!-- HEADER -->
             <div class="row">
-                <div class="header">
-                    {% include "missing_categories/header.html" %}
+                <div id="header">
+                    {% include "header.html" %}
                 </div>
             </div>
             
-            {# CONTENT #}
+            
             <div class="row">
                 <div class="content col-sm-12">
                     {% block content %}

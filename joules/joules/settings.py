@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'stock',
     'missing_categories',
+    'home',
 ]
 
 MIDDLEWARE = [
