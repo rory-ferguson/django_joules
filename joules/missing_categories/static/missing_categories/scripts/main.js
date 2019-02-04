@@ -32,6 +32,8 @@ function create_post(env) {
         data : { env : env },
         async: true,
         success : function(json) {
+            $('#content div p').html("");
+
             prod_list = ''
             for (const [key, value] of Object.entries(json.uk)) {
                 prod_list += '<p>' + value + '</p>'
