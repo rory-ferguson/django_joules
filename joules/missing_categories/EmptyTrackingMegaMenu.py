@@ -5,11 +5,14 @@ import time
 import requests
 import bs4
 import logging
-from multiprocessing.dummy import Pool as ThreadPool
+from concurrent.futures import ThreadPoolExecutor
+from requests_html import HTMLSession
+
 """
     Captures the InsecureRequestWarning (HTTPS SSL Verification Error)
 """
 logging.captureWarnings(True)
+session = HTMLSession()
 
 
 class Main(object):
@@ -35,12 +38,20 @@ class Main(object):
         HTTP request to store html as an object
         """
         r = requests.get(url, verify=False)
-
         if r.status_code == 200:
             self.parse_soup = bs4.BeautifulSoup(r.text, "html.parser")
 
             if self.parse_soup.find_all('div', {"class": "totalResults"}):
                 self.missing_product.append(url)
+
+    def re(self, url):
+        """
+        HTTP request to store html as an object
+        """
+        r = session.get(url)
+
+        if r.html.find('div.totalResults'):
+            self.missing_product.append(url)
 
     def nav_list_unfiltered(self):
         """
@@ -102,15 +113,14 @@ def run_script(env):
     worker.nav_list_duplicates()
     worker.nav_filter_external()
     worker.iterate()
-    pool = ThreadPool(4)
-    pool.map(worker.request, worker.mega_menu_url_list)
-    pool.close()
-    pool.join()
-    lst = worker.write_out()
+
+    with ThreadPoolExecutor(max_workers=10000) as pool:
+        pool.map(worker.re, worker.mega_menu_url_list)
+
     print("--- %s seconds ---" % (time.time() - start_time))
-    return lst
+    return worker.write_out()
 
 
 if __name__ == '__main__':
-    live = [['https://www.joules.com'], ['https://www.joulesusa.com'], ['https://www.tomjoule.de']]
+    live = [['https://uk-staging.prod.joules.joules-prod01.aws.eclipsegroup.co.uk'], ['https://www.joulesusa.com'], ['https://www.tomjoule.de']]
     run_script(env=live[0])
