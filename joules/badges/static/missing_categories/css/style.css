@@ -1,0 +1,28 @@
+
+.content {
+	position: relative;
+}
+#post {
+	margin-top: 25px;
+}
+li {
+	list-style: none;
+	display: inline-block;
+	padding: 0 10px;
+}
+ul {
+	display: inline-block;
+	padding: 0 20px 0;
+}
+ul, li {
+	margin: 0;
+}
+
+form {
+	margin-top: 20px;
+}
+
+#content .fa {
+	font-size: 30px !important;
+	margin-top: 20px;
+}
