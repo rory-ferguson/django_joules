@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .forms import SubmitButtonWidget
+from .site_scrape_plp import main
 from multiprocessing import Process, Pool
 
 live = [['https://www.joules.com'], ['https://www.joulesusa.com'], ['https://www.tomjoule.de']]
