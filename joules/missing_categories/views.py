@@ -12,33 +12,24 @@ lst = {}
 def main(request):
     if request.method == 'POST':
         if 'live' in request.POST.get('env'):
-            env = request.POST.get('env')
+            return JsonResponse(run_environment(live))
 
-            with Pool(processes=3) as pool:
-                p1 = pool.apply_async(run_script, (live[0], ))
-                p2 = pool.apply_async(run_script, (live[1], ))
-                p3 = pool.apply_async(run_script, (live[2], ))
-
-                lst['uk'] = p1.get()
-                lst['us'] = p2.get()
-                lst['de'] = p3.get()
-
-                return JsonResponse(lst)
         if 'staging' in request.POST.get('env'):
-            env = request.POST.get('env')
-
-            with Pool(processes=3) as pool:
-                p1 = pool.apply_async(run_script, (staging[0], ))
-                p2 = pool.apply_async(run_script, (staging[1], ))
-                p3 = pool.apply_async(run_script, (staging[2], ))
-
-                lst['uk'] = p1.get()
-                lst['us'] = p2.get()
-                lst['de'] = p3.get()
-
-                return JsonResponse(lst)
+            return JsonResponse(run_environment(staging))
 
     else:
         form = SubmitButtonWidget()
 
     return render(request, 'missing_categories/content.html', {'form': form})
+
+def run_environment(env):
+    with Pool(processes=3) as pool:
+        p1 = pool.apply_async(run_script, (env[0], ))
+        p2 = pool.apply_async(run_script, (env[1], ))
+        p3 = pool.apply_async(run_script, (env[2], ))
+
+        lst['uk'] = p1.get()
+        lst['us'] = p2.get()
+        lst['de'] = p3.get()
+
+        return lst
