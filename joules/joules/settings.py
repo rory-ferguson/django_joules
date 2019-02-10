@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'stock',
     'missing_categories',
     'home',
+    'badges',
 ]
 
 MIDDLEWARE = [
