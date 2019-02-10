@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from . import views
 
-app_name = 'missing_categories'
+app_name = 'badges'
 
 urlpatterns = [
     url(r'', views.main, name=app_name),
