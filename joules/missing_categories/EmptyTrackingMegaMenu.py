@@ -114,7 +114,7 @@ def run_script(env):
     worker.nav_filter_external()
     worker.iterate()
 
-    with ThreadPoolExecutor(max_workers=10) as pool:
+    with ThreadPoolExecutor(max_workers=6) as pool:
         pool.map(worker.re, worker.mega_menu_url_list)
 
     print("--- %s seconds ---" % (time.time() - start_time))
