@@ -49,7 +49,7 @@ class Main(object):
         HTTP request to store html as an object
         """
         r = session.get(url)
-
+        print(url)
         if r.html.find('div.totalResults'):
             self.missing_product.append(url)
 
@@ -114,7 +114,7 @@ def run_script(env):
     worker.nav_filter_external()
     worker.iterate()
 
-    with ThreadPoolExecutor(max_workers=6) as pool:
+    with ThreadPoolExecutor(max_workers=100) as pool:
         pool.map(worker.re, worker.mega_menu_url_list)
 
     print("--- %s seconds ---" % (time.time() - start_time))
@@ -122,5 +122,5 @@ def run_script(env):
 
 
 if __name__ == '__main__':
-    live = [['https://uk-staging.prod.joules.joules-prod01.aws.eclipsegroup.co.uk'], ['https://www.joulesusa.com'], ['https://www.tomjoule.de']]
+    live = [['https://www.joules.com'], ['https://www.joulesusa.com'], ['https://www.tomjoule.de']]
     run_script(env=live[0])
