@@ -1,5 +1,5 @@
 
-django==1.11
+django==1.11.18
 requests
 bs4
 requests_html
