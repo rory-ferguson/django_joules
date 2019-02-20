@@ -19,7 +19,6 @@ list_purge_duplicates_one = []
 list_purge_duplicates_two = []
 
 
-class Main(object):
 
 def get_request(url):
     """
@@ -164,7 +163,7 @@ def category(domain, url, name):
                                         waswas_price,
                                         was_price,
                                         new_price))
-                    print(product_list)
+                    # print(product_list)
 
                     counter += 1
                     for col, val in enumerate(product_list, start=1):
@@ -188,7 +187,7 @@ def main():
     navigation_duplicates(list_arg=navigation_list_unfiltered)
 
     remove_external_urls()
-
+    print(purge_external_urls)
     category(domain=domain_url, url=purge_external_urls, name=f'main')
 
     end = time.time()
