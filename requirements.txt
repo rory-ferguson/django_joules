@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 43c521904ef4e486c31d0ad122ea435d4d0ceca0
 django==1.11.18
 requests
 bs4

@@ -28,6 +28,7 @@ class Main(object):
         self.list_purge_duplicates_two = []
         self.parse_soup = None
         self.domain_url = None
+        self.product_list = []
 
     def domain(self, url):
         self.domain_url = url
@@ -105,7 +106,7 @@ class Main(object):
 
     def category(self, url):
 
-        product_list = []
+
         for i in range(100):
             html_doc = requests.get(str(url) + "?showFragment=true&page=" + str(i),
                                     verify=False,
@@ -174,16 +175,17 @@ class Main(object):
                         get request to product landing page,
                         to collect 404, prices etc
                     """
-                    product_list.extend([html_doc.status_code,
+                    self.product_list.extend([html_doc.status_code,
                                         product_id,
                                         img_badge,
                                         waswas_price,
                                         was_price,
                                         new_price])
-                    print(product_list)
 
             else:
                 break
+
+        # print(self.product_list)
 
 
 def run_script(env):
@@ -195,9 +197,16 @@ def run_script(env):
     worker.nav_list_duplicates()
     worker.nav_filter_external()
     worker.iterate()
+    print(worker.mega_menu_url_list)
 
     with ThreadPoolExecutor(max_workers=1) as pool:
         pool.map(worker.category, worker.mega_menu_url_list)
+    """
+        1. amend product_list type, preferably to [(), ()]
+        2. write out to .xlsx
+        3. return file to web      
+    """
+    print(worker.product_list)
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
