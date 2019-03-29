@@ -28,6 +28,7 @@ class Main(object):
         self.list_purge_duplicates_two = []
         self.parse_soup = None
         self.domain_url = None
+        self.product_list = []
 
     def domain(self, url):
         self.domain_url = url
@@ -44,15 +45,6 @@ class Main(object):
             if self.parse_soup.find_all('div', {"class": "totalResults"}):
                 self.missing_product.append(url)
 
-    def re(self, url):
-        """
-        HTTP request to store html as an object
-        """
-        r = session.get(url)
-        print(url)
-        if r.html.find('div.totalResults'):
-            self.missing_product.append(url)
-
     def nav_list_unfiltered(self):
         """
             Stored list of navigation links from the mega menu // unfiltered
@@ -61,7 +53,6 @@ class Main(object):
 
         for i in lst:
             self.mm_list_unfiltered.append(i.find("a").get("href"))
-            # print(i.find("a").get("href"))
 
     def nav_list_duplicates(self):
         """
@@ -94,6 +85,9 @@ class Main(object):
         [list_purge_external_urls.remove(i) for i in self.list_purge_duplicates if i.__contains__('.')]
 
     def iterate(self):
+        """
+            join menu links to domain
+        """
         for i in list_purge_external_urls:
             self.mega_menu_url_list.append(self.domain_url + i)
 
@@ -104,10 +98,8 @@ class Main(object):
         return self.missing_product
 
     def category(self, url):
-
-        product_list = []
-        for i in range(100):
-            html_doc = requests.get(str(url) + "?showFragment=true&page=" + str(i),
+        for j in range(100):
+            html_doc = requests.get(str(url) + "?showFragment=true&page=" + str(j),
                                     verify=False,
                                     allow_redirects=False)
 
@@ -162,7 +154,6 @@ class Main(object):
 
                     """ Product ID """
                     product_id = None
-                    product_href = None
                     try:
                         r = i.find('div', {'class': 'product-name'})
                         product_href = r.a['href']
@@ -174,16 +165,13 @@ class Main(object):
                         get request to product landing page,
                         to collect 404, prices etc
                     """
-                    product_list.extend([html_doc.status_code,
-                                        product_id,
-                                        img_badge,
-                                        waswas_price,
-                                        was_price,
-                                        new_price])
-                    print(product_list)
+                    tmp_lst = [(html_doc.status_code, product_id, img_badge, waswas_price, was_price, new_price)]
+                    self.product_list.extend(tmp_lst)
+                    # print(self.product_list)
 
             else:
                 break
+
 
 
 def run_script(env):
@@ -196,8 +184,15 @@ def run_script(env):
     worker.nav_filter_external()
     worker.iterate()
 
+
+
     with ThreadPoolExecutor(max_workers=1) as pool:
-        pool.map(worker.category, worker.mega_menu_url_list)
+        # pool.map(worker.category, worker.mega_menu_url_list)
+        pool.map(worker.category, ['https://www.joules.com/Home-and-Garden/Bathroom/Towels'])
+    """
+        1. write out to .xlsx
+        2. return file to web
+    """
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
