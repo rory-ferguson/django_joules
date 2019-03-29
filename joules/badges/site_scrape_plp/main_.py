@@ -98,6 +98,7 @@ class Main(object):
         return self.missing_product
 
     def category(self, url):
+        print(url)
         for j in range(100):
             html_doc = requests.get(str(url) + "?showFragment=true&page=" + str(j),
                                     verify=False,
@@ -167,11 +168,12 @@ class Main(object):
                     """
                     tmp_lst = [(html_doc.status_code, product_id, img_badge, waswas_price, was_price, new_price)]
                     self.product_list.extend(tmp_lst)
-                    # print(self.product_list)
 
             else:
                 break
 
+    def return_list(self):
+        return self.product_list
 
 
 def run_script(env):
@@ -184,11 +186,10 @@ def run_script(env):
     worker.nav_filter_external()
     worker.iterate()
 
-
-
     with ThreadPoolExecutor(max_workers=1) as pool:
         # pool.map(worker.category, worker.mega_menu_url_list)
         pool.map(worker.category, ['https://www.joules.com/Home-and-Garden/Bathroom/Towels'])
+
     """
         1. write out to .xlsx
         2. return file to web
@@ -196,7 +197,7 @@ def run_script(env):
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
-    # return worker.write_out()
+    return worker.return_list()
 
 
 if __name__ == '__main__':
