@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 # python 3.x
 
+from pathlib import Path
+import os.path
 import time
 import requests
 import bs4
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from requests_html import HTMLSession
+from openpyxl import load_workbook
 
 """
     Captures the InsecureRequestWarning (HTTPS SSL Verification Error)
@@ -166,14 +169,24 @@ class Main(object):
                         get request to product landing page,
                         to collect 404, prices etc
                     """
-                    tmp_lst = [(html_doc.status_code, product_id, img_badge, waswas_price, was_price, new_price)]
+                    tmp_lst = [[html_doc.status_code, product_id, img_badge, waswas_price, was_price, new_price]]
                     self.product_list.extend(tmp_lst)
 
             else:
                 break
 
     def return_list(self):
-        return self.product_list
+        loc = Path(os.path.abspath(os.path.dirname(__file__))).joinpath('Template.xlsx')
+        wb = load_workbook(loc)
+        ws = wb.active
+        counter = 0
+
+        for i in self.product_list:
+            counter += 1
+            for col, val in enumerate(i, start=1):
+                ws.cell(row=counter + 2, column=col).value = val
+        wb.save(filename=f'test.xlsx')
+        return
 
 
 def run_script(env):
