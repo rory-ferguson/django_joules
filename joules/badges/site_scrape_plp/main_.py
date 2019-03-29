@@ -186,7 +186,7 @@ class Main(object):
             for col, val in enumerate(i, start=1):
                 ws.cell(row=counter + 2, column=col).value = val
         wb.save(filename=f'test.xlsx')
-        return
+        return self.product_list
 
 
 def run_script(env):
@@ -207,7 +207,7 @@ def run_script(env):
         1. write out to .xlsx
         2. return file to web
     """
-
+    print(worker.return_list())
     print("--- %s seconds ---" % (time.time() - start_time))
 
     return worker.return_list()
