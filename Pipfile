@@ -8,8 +8,10 @@ verify_ssl = true
 [packages]
 django = "==1.11.18"
 requests = "*"
-bs4 = "*"
 requests-html = "*"
+beautifulsoup4 = "*"
+tqdm = "*"
+openpyxl = "*"
 
 [requires]
 python_version = "3.7"
