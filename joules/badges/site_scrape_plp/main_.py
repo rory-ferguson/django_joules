@@ -207,7 +207,7 @@ def run_script(env):
         1. write out to .xlsx
         2. return file to web
     """
-    print(worker.return_list())
+    # print(worker.return_list())
     print("--- %s seconds ---" % (time.time() - start_time))
 
     return worker.return_list()

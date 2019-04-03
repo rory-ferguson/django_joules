@@ -25,14 +25,17 @@ def main(request):
             #     for item in my_list:
             #         file.write("%s\n" % item)
 
-            response = HttpResponse(content, content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename=file.csv'
-            return response
+            content = Path(os.path.abspath(os.path.dirname(__file__))).joinpath('txt.txt')
+            with open(content, 'rb') as fh:
+                response = HttpResponse(fh.read(), content_type='text/csv')
+                response['Content-Disposition'] = 'attachment; filename=txt.txt'
+                return response
 
             # file = Path(os.path.abspath(os.path.dirname(__file__))).joinpath('test.xlsx')
-            # response = HttpResponse(file, content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-            # response['Content-Disposition'] = 'attachment; filename=test.xlsx'
-            # return response
+            # with open(file, 'rb') as fh:
+            #     response = HttpResponse(fh.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            #     response['Content-Disposition'] = 'attachment; filename=' + str(file)
+            #     return response
 
     else:
         form = SubmitButtonWidget()
