@@ -21,12 +21,12 @@ class Main(object):
     def __init__(self):
         self.missing_product = []
         self.mm_list_unfiltered = []
-        self.list_purge_duplicates = []
+        self.purge_duplicates = []
         self.empty_tracking_list = []
         self.mega_menu_url_list = []
-        self.list_purge_duplicates = []
-        self.list_purge_duplicates_one = []
-        self.list_purge_duplicates_two = []
+        self.purge_duplicates = []
+        self.purge_duplicate_urls_one = []
+        self.purge_duplicate_urls_two = []
         self.parse_soup = None
         self.domain_url = None
         self.product_list = []
@@ -46,7 +46,7 @@ class Main(object):
             if self.parse_soup.find_all('div', {"class": "totalResults"}):
                 self.missing_product.append(url)
 
-    def nav_list_unfiltered(self):
+    def list_unfiltered(self):
         """
             Stored list of navigation links from the mega menu // unfiltered
         """
@@ -55,48 +55,47 @@ class Main(object):
         for i in lst:
             self.mm_list_unfiltered.append(i.find("a").get("href"))
 
-    def nav_list_duplicates(self):
+    def list_duplicates(self):
         """
             Function to remove duplicates from a list, preserves original list order
         """
 
         """ Removes URLs start with &, these are JS injected """
-        [self.list_purge_duplicates_one.append(i) for i in self.mm_list_unfiltered if not i.startswith('&')]
+        [self.purge_duplicate_urls_one.append(i) for i in self.mm_list_unfiltered if not i.startswith('&')]
 
         """ Removes tracking """
-        for i in self.list_purge_duplicates_one:
+        for i in self.purge_duplicate_urls_one:
             if '?' in i:
                 x = i.split('?')[0]
-                self.list_purge_duplicates_two.append(x)
+                self.purge_duplicate_urls_two.append(x)
             elif '?' not in i:
-                self.list_purge_duplicates_two.append(i)
+                self.purge_duplicate_urls_two.append(i)
 
         """ Removes duplicate URLS """
-        [self.list_purge_duplicates.append(i) for i in self.list_purge_duplicates_two if not self.list_purge_duplicates.count(i)]
+        [self.purge_duplicates.append(i) for i in self.purge_duplicate_urls_two if not self.purge_duplicates.count(i)]
 
-        return self.list_purge_duplicates
+        return self.purge_duplicates
 
-    def nav_filter_external(self):
+    def filter_external(self):
         """
             Filter out external urls such as blog/pinterest
         """
         global list_purge_external_urls
-        list_purge_external_urls = list(self.list_purge_duplicates)
+        list_purge_external_urls = list(self.purge_duplicates)
 
-        [list_purge_external_urls.remove(i) for i in self.list_purge_duplicates if i.__contains__('.')]
+        [list_purge_external_urls.remove(i) for i in self.purge_duplicates if i.__contains__('.')]
 
-    def iterate(self):
+    def concatenate_url(self):
         """
             join menu links to domain
         """
-        for i in list_purge_external_urls:
-            self.mega_menu_url_list.append(self.domain_url + i)
+        for url in list_purge_external_urls:
+            self.mega_menu_url_list.append(self.domain_url + url)
 
     def category(self, url):
         """
             Iterate through each category URL and scrape information from the product listing pages
         """
-        print(url)
         for j in range(100):
             html_doc = requests.get(str(url) + "?showFragment=true&page=" + str(j),
                                     verify=False,
@@ -179,14 +178,14 @@ def run_script(env):
     print(f'Running search on {env[0]}...')
     worker = Main()
     worker.request(url=worker.domain(url=env[0]))
-    worker.nav_list_unfiltered()
-    worker.nav_list_duplicates()
-    worker.nav_filter_external()
-    worker.iterate()
+    worker.list_unfiltered()
+    worker.list_duplicates()
+    worker.filter_external()
+    worker.concatenate_url()
 
     with ThreadPoolExecutor(max_workers=1) as pool:
-        # pool.map(worker.category, worker.mega_menu_url_list)
-        pool.map(worker.category, ['https://www.joules.com/Home-and-Garden/Bathroom/Towels'])
+        pool.map(worker.category, worker.mega_menu_url_list)
+        # pool.map(worker.category, ['https://www.joules.com/Home-and-Garden/Bathroom/Towels'])
 
     worker.return_list()
     print("--- %s seconds ---" % (time.time() - start_time))

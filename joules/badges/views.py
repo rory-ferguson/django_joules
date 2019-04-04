@@ -20,7 +20,7 @@ def main(request):
     if request.method == 'POST':
         if 'live' in request.POST.get('env'):
             lst = run_environment(live)
-
+            print(lst)
             response = HttpResponse(content_type='text/csv')
             response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
 
