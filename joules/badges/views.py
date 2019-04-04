@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .forms import SubmitButtonWidget
-from .site_scrape_plp.main_ import run_script
+from .site_scrape_plp.main import run_script
 from multiprocessing import Process, Pool
 from pathlib import Path
 import os.path
