@@ -5,9 +5,14 @@
         <div class="tac">
             <form action="" onsubmit="validateFunc()" method="post">
                 {% csrf_token %}
-                <div>
-                    {{ form }}
-                    <input type="submit" value="Post">
+                <div class="form-container">
+                    {% for field in form %}
+                        <div class="label-container">
+                            <label>{{ field.label }}:</label>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                    <input type="submit" value="SUBMIT">
                 </div>
             </form>
             <div class="uk">

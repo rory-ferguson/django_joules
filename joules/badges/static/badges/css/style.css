@@ -5,6 +5,13 @@
 #post {
 	margin-top: 25px;
 }
+input {
+	background: #468966;
+	color: #fff;
+	border: none;
+	padding: 4px 30px;
+	margin: 5px 0;
+}
 li {
 	list-style: none;
 	display: inline-block;
@@ -19,7 +26,14 @@ ul, li {
 }
 
 form {
-	margin-top: 20px;
+	/*margin-top: 20px;*/
+}
+form > div {
+	padding: 10px;
+	background: #B64926;	
+}
+.label-container {
+	padding: 10px 0;
 }
 
 #content .fa {
