@@ -25,9 +25,6 @@ ul, li {
 	margin: 0;
 }
 
-form {
-	/*margin-top: 20px;*/
-}
 form > div {
 	padding: 10px;
 	background: #B64926;	
