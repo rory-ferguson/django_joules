@@ -184,8 +184,8 @@ def run_script(env):
     worker.concatenate_url()
 
     with ThreadPoolExecutor(max_workers=1) as pool:
-        pool.map(worker.category, worker.mega_menu_url_list)
-        # pool.map(worker.category, ['https://www.joules.com/Home-and-Garden/Bathroom/Towels'])  # For debugging only
+        # pool.map(worker.category, worker.mega_menu_url_list)
+        pool.map(worker.category, ['https://www.joules.com/Home-and-Garden/Bathroom/Towels'])  # For debugging only
 
     worker.return_list()
     print("--- %s seconds ---" % (time.time() - start_time))

@@ -8,6 +8,12 @@ from django import forms
 from django.utils import html
 
 class SubmitButtonWidget(forms.Form):
-    CHOICES=[('live','LIVE'),('staging','STAGING')]
+    COUNTRY=[('live','LIVE'),('staging','STAGING')]
 
-    ENV = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    ENV = forms.ChoiceField(choices=COUNTRY, widget=forms.RadioSelect)
+
+
+class SubmitButtonWidgetOne(forms.Form):
+    TYPE=[('plp','PLP')]
+
+    PAGE_TYPE = forms.ChoiceField(choices=TYPE, widget=forms.RadioSelect)
