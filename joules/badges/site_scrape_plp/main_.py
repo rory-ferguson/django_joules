@@ -92,12 +92,6 @@ class Main(object):
         for i in list_purge_external_urls:
             self.mega_menu_url_list.append(self.domain_url + i)
 
-    def write_out(self):
-        """
-           Product Pages with 0 products
-        """
-        return self.missing_product
-
     def category(self, url):
         """
             Iterate through each category URL and scrape information from the product listing pages
@@ -177,16 +171,6 @@ class Main(object):
                 break
 
     def return_list(self):
-        loc = Path(os.path.abspath(os.path.dirname(__file__))).joinpath('Template.xlsx')
-        wb = load_workbook(loc)
-        ws = wb.active
-        counter = 0
-
-        for i in self.product_list:
-            counter += 1
-            for col, val in enumerate(i, start=1):
-                ws.cell(row=counter + 2, column=col).value = val
-        wb.save(filename=f'test.xlsx')
         return self.product_list
 
 
@@ -204,7 +188,7 @@ def run_script(env):
         # pool.map(worker.category, worker.mega_menu_url_list)
         pool.map(worker.category, ['https://www.joules.com/Home-and-Garden/Bathroom/Towels'])
 
-    # print(worker.return_list())
+    worker.return_list()
     print("--- %s seconds ---" % (time.time() - start_time))
 
     return worker.return_list()
