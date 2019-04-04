@@ -11,9 +11,7 @@ from concurrent.futures import ThreadPoolExecutor
 from requests_html import HTMLSession
 from openpyxl import load_workbook
 
-"""
-    Captures the InsecureRequestWarning (HTTPS SSL Verification Error)
-"""
+
 logging.captureWarnings(True)
 session = HTMLSession()
 
@@ -101,6 +99,9 @@ class Main(object):
         return self.missing_product
 
     def category(self, url):
+        """
+            Iterate through each category URL and scrape information from the product listing pages
+        """
         print(url)
         for j in range(100):
             html_doc = requests.get(str(url) + "?showFragment=true&page=" + str(j),
@@ -203,10 +204,6 @@ def run_script(env):
         # pool.map(worker.category, worker.mega_menu_url_list)
         pool.map(worker.category, ['https://www.joules.com/Home-and-Garden/Bathroom/Towels'])
 
-    """
-        1. write out to .xlsx
-        2. return file to web
-    """
     # print(worker.return_list())
     print("--- %s seconds ---" % (time.time() - start_time))
 
