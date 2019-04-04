@@ -2,7 +2,7 @@
 // Submit post on submit
 $('#content form').on('submit', function(event){
     event.preventDefault();
-    $('#content div.uk i').removeClass('hidden')
+    $('#loading-banner').removeClass('hidden')
 });
 
 function validateFunc() {
@@ -69,7 +69,8 @@ function create_post(env) {
                 }
             }
             // Hide spinner
-            $('#content div.uk i').addClass('hidden')
+            $('#loading-banner').addClass('hidden')
+            $('#loading-complete').removeClass('hidden')
         }
     });
 };

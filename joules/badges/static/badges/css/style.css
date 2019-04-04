@@ -34,6 +34,22 @@ form > div {
 }
 
 #content .fa {
-	font-size: 30px !important;
-	margin-top: 20px;
+	font-size: 30px;
+}
+
+#loading-banner {
+	padding: 10px 0;
+	background-color: red;
+	color: #fff;
+}
+
+#loading-banner > span {
+	vertical-align: middle;
+	margin: 10px;
+	padding: 0 0 10px 10px;
+}
+#loading-complete {
+	padding: 10px 0;
+	background-color: #468966;
+	color: #fff;
 }

@@ -3,6 +3,8 @@
 {% block content %}
     <div id="content">
         <div class="tac">
+            <div id="loading-banner" class="hidden"><i class="fa fa-refresh fa-spin" style="font-size:24px"></i> <span>Please wait</span></div>
+            <div id="loading-complete" class="hidden"><span>Finished</span></div>
             <form action="" onsubmit="validateFunc()" method="post">
                 {% csrf_token %}
                 <div class="form-container">
@@ -16,7 +18,6 @@
                 </div>
             </form>
             <div class="uk">
-                <i class="fa fa-refresh fa-spin hidden" style="font-size:24px"></i>
                 <h3>UK</h3>
                 {% for i in uk %}
                     <p>{{ i }}</p>
